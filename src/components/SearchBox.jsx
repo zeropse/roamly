@@ -35,14 +35,19 @@ const SearchBox = () => {
       ...data.temples.filter((temple) =>
         temple.name.toLowerCase().includes(lowerCaseTerm)
       ),
+      ...data.countries.flatMap((country) =>
+        country.cities.filter((city) =>
+          city.name.toLowerCase().includes(lowerCaseTerm)
+        )
+      ),
     ];
 
-    const matchedCountry = data.countries.find(
-      (country) => country.name.toLowerCase() === lowerCaseTerm
-    );
+    if (["beach", "beaches"].includes(lowerCaseTerm)) {
+      matchedResults = [...matchedResults, ...data.beaches];
+    }
 
-    if (matchedCountry) {
-      matchedResults = [...matchedResults, ...matchedCountry.cities];
+    if (["temple", "temples"].includes(lowerCaseTerm)) {
+      matchedResults = [...matchedResults, ...data.temples];
     }
 
     setResults(matchedResults);

@@ -26,24 +26,23 @@ const SearchBox = () => {
     if (!searchTerm.trim()) return;
 
     const lowerCaseTerm = searchTerm.toLowerCase();
-    const categoryMap = {
-      beach: "beaches",
-      beaches: "beaches",
-      temple: "temples",
-      temples: "temples",
-    };
-
     let matchedResults = [];
 
-    if (categoryMap[lowerCaseTerm]) {
-      matchedResults = data[categoryMap[lowerCaseTerm]]?.slice(0, 2) || [];
-    } else {
-      const matchedCountry = data.countries.find(
-        (country) => country.name.toLowerCase() === lowerCaseTerm
-      );
-      if (matchedCountry) {
-        matchedResults = matchedCountry.cities?.slice(0, 2) || [];
-      }
+    matchedResults = [
+      ...data.beaches.filter((beach) =>
+        beach.name.toLowerCase().includes(lowerCaseTerm)
+      ),
+      ...data.temples.filter((temple) =>
+        temple.name.toLowerCase().includes(lowerCaseTerm)
+      ),
+    ];
+
+    const matchedCountry = data.countries.find(
+      (country) => country.name.toLowerCase() === lowerCaseTerm
+    );
+
+    if (matchedCountry) {
+      matchedResults = [...matchedResults, ...matchedCountry.cities];
     }
 
     setResults(matchedResults);
